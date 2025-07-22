@@ -61,64 +61,58 @@ Bagaimana memprediksi apakah seorang nasabah akan membuka term deposit setelah d
 ---
 
 ## 4. Modeling & Evaluation
-### 4.1 Model Benchmarking
-- Model yang diuji: Logistic Regression, Decision Tree, Random Forest, Voting Classifier
-- Evaluasi dengan Stratified K-Fold Cross Validation (K=5)
-- Metrik: ROC AUC, Accuracy, Recall
-
-### 4.2 Handling Imbalance
-- Oversampling dengan SMOTE untuk meningkatkan recall pada kelas minoritas
-
-### 4.3 Hyperparameter Tuning
-- RandomizedSearchCV untuk Random Forest & Logistic Regression
-- Parameter terbaik:
-  - Random Forest: n_estimators=200, min_samples_split=2, min_samples_leaf=4, max_depth=20, bootstrap=True
-  - Logistic Regression: solver=liblinear, penalty=l2, C=0.1
-
-### 4.4 Feature Importance & Selection
-- Fitur terpenting: balance, age, contact_unknown, poutcome_success, pdays, campaign, housing_yes, month_may, loan_yes, month_jun, month_mar
-- Model akhir dibangun dengan fitur-fitur terpilih
-
-### 4.5 Final Model Evaluation
-- **Random Forest**: Precision 73%, Recall 62%, Accuracy 71%, ROC AUC 0.765
-- **Logistic Regression**: Precision 71%, Recall 65%, Accuracy 70%, ROC AUC 0.766
+- Model yang diuji: Logistic Regression, Random Forest, Decision Tree, Voting Classifier
+- Benchmarking awal: Voting Classifier unggul di ROC AUC/akurasi, Random Forest unggul di recall
+- Setelah oversampling (SMOTE): Random Forest kombinasi terbaik akurasi dan recall, Voting Classifier recall tinggi tapi akurasi turun
+- Hyperparameter tuning hanya untuk Logistic Regression & Random Forest (model lain performa rendah/overfitting)
+- **Model final: Logistic Regression**
+  - Recall: 0.65 (tertinggi, penting untuk bisnis)
+  - Akurasi: 0.70
+  - ROC AUC: 0.766
+  - Model lebih sederhana dan mudah diinterpretasikan
 
 ---
 
-## 5. Insight & Business Recommendation
-- **Faktor utama:** Saldo, usia, histori kontak, hasil campaign sebelumnya, dan waktu promosi
-- **Segmentasi:** Management & retired lebih potensial untuk deposito
-- **Rekomendasi:**
-  - Gunakan Random Forest untuk memprioritaskan leads
-  - Fokuskan campaign pada nasabah dengan probabilitas tinggi membuka deposito
-  - Lakukan pendekatan berbeda untuk segmen dengan minat rendah
-  - Evaluasi campaign bulanan untuk mengidentifikasi waktu terbaik promosi
+## 5. Feature Importance
+- Fitur terpenting: saldo, usia, histori kontak, hasil campaign sebelumnya, campaign, housing, bulan promosi (Mei, Juni, Maret)
+- Segmentasi pekerjaan dan waktu campaign sangat berpengaruh
 
 ---
 
-## 6. Model Deployment
-- Model Random Forest hasil tuning dan feature selection disimpan dalam file `final_random_forest_model.pkl` untuk prediksi di masa depan.
+## 6. Business Recommendation
+1. **Fokuskan campaign pada nasabah dengan saldo tinggi dan usia 30–50 tahun**
+2. **Prioritaskan segmen pekerjaan management & retired**
+3. **Lakukan campaign intensif di bulan Mei**
+4. **Manfaatkan histori kontak dan hasil campaign sebelumnya untuk penargetan**
+5. **Kurangi kontak ke nasabah dengan peluang rendah**
+6. **Lakukan A/B testing strategi baru vs lama**
+7. **Monitoring & evaluasi model secara berkala**
 
 ---
 
-## 7. File
+## 7. Model Deployment
+- Model Logistic Regression final disimpan sebagai `final_logistic_regression_model.pkl` dan siap digunakan untuk prediksi batch atau real-time.
+
+---
+
+## 8. File
 - `Capstone3.ipynb`: Notebook pipeline analisis & modeling
 - `data_bank_marketing_campaign.csv`: Dataset
 - `final_random_forest_model.pkl`: Model Random Forest siap deploy
 
 ---
 
-## 8. How to Use
+## 9. How to Use
 1. Jalankan notebook `Capstone3.ipynb` untuk melihat seluruh proses analisis dan modeling.
 2. Untuk prediksi baru, load model dari `final_random_forest_model.pkl` dan lakukan preprocessing data sesuai pipeline di notebook.
 
 ---
 
-## 9. Author
+## 10. Author
 Nama: Muhammad Jundullah
 
 ---
 
-## 10. References
+## 11. References
 - UCI Machine Learning Repository: Bank Marketing Dataset
 - Scikit-learn, Pandas, Seaborn, Matplotlib 
